@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{65201442-79a9-485c-a853-f45e8cda47f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{c80e0207-9d5d-4c9b-8391-84591369d074}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{15cbecf2-b378-4332-af8c-aed445fa279c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\Grid">
+      <UniqueIdentifier>{ab7385b5-9760-486b-bec8-1ece2e0be2e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\ParticleSystem">
+      <UniqueIdentifier>{338ee35a-e19a-43a4-b0e7-f1d67dbfab0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Shader">
+      <UniqueIdentifier>{b467b96c-ab46-44a3-9630-a67b7cf3f6a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\Setup">
+      <UniqueIdentifier>{f3ac2a48-1113-46e1-888d-35e0a734ea67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\snow">
+      <UniqueIdentifier>{cc021339-7218-4b09-a282-59dcf6481d6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\plane">
+      <UniqueIdentifier>{1731312e-46c6-4d6a-9692-8d14510a0613}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\CudaMath">
+      <UniqueIdentifier>{070d6968-1e40-4595-90b7-68007558bd5b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.hpp">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="Cell.h">
+      <Filter>Physics\Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Physics\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>Physics\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Rendering\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Parameters.h">
+      <Filter>Physics\Setup</Filter>
+    </ClInclude>
+    <ClInclude Include="SetupFunctions.hpp">
+      <Filter>Physics\Setup</Filter>
+    </ClInclude>
+    <ClInclude Include="helper_math.h">
+      <Filter>Physics\CudaMath</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.hpp">
+      <Filter>Physics\Setup</Filter>
+    </ClInclude>
+    <ClInclude Include="decomposition.h">
+      <Filter>Physics\CudaMath</Filter>
+    </ClInclude>
+    <ClInclude Include="matrix.h">
+      <Filter>Physics\CudaMath</Filter>
+    </ClInclude>
+    <ClInclude Include="quaternion.h">
+      <Filter>Physics\CudaMath</Filter>
+    </ClInclude>
+    <ClInclude Include="svd3\svd3_cuda\svd3_cuda.h">
+      <Filter>Physics\CudaMath</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>Physics\ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Rendering\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="snow.frag">
+      <Filter>shaders\snow</Filter>
+    </None>
+    <None Include="snow.vert">
+      <Filter>shaders\snow</Filter>
+    </None>
+    <None Include="plane.frag">
+      <Filter>shaders\plane</Filter>
+    </None>
+    <None Include="plane.vert">
+      <Filter>shaders\plane</Filter>
+    </None>
+    <None Include="Simulation.cuh">
+      <Filter>Physics\ParticleSystem</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="Simulation.cu">
+      <Filter>Physics\ParticleSystem</Filter>
+    </CudaCompile>
+    <CudaCompile Include="svd3\svd3_cuda\svd3.cu">
+      <Filter>Physics\CudaMath</Filter>
+    </CudaCompile>
+  </ItemGroup>
+</Project>
