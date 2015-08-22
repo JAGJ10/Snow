@@ -7,6 +7,7 @@ Dependencies for the project include:
   - GLM
   - DevIL
 
+3x3 SVD implementation taken from https://github.com/ericjang/svd3
 
 Screenshots:
 ![Alt text](/screenshots/ss.png?raw=true "Snow ball smashing into a wall")
