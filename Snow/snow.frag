@@ -8,6 +8,10 @@ uniform float pointRadius;
 
 out vec4 fragColor;
 
+float rand(vec2 co){
+  return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
 void main() {
 	//calculate normal
 	vec3 normal;

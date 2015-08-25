@@ -12,9 +12,6 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 
-#include <IL\il.h>
-#include <IL\ilut.h>
-
 using namespace std;
 
 static const int width = 1280;
@@ -25,13 +22,13 @@ static float deltaTime = 0.0f;
 static float lastFrame = 0.0f;
 static int frameCounter = -1;
 static int w = 0;
-static bool ss = false;
+static bool video = false;
+static bool startVideo = false;
 static bool paused = true;
 static bool spacePressed = false;
 
 void handleInput(GLFWwindow* window, ParticleSystem &system, Camera &cam);
 void mainUpdate(ParticleSystem& system, Renderer& renderer, Camera& cam, solverParams& params);
-void saveVideo();
 
 int main() {
 	//Checks for memory leaks in debug mode
@@ -63,15 +60,10 @@ int main() {
 	//Define the viewport dimensions
 	glViewport(0, 0, width, height);
 
-	ilutInit();
-	ilInit();
-	ilutRenderer(ILUT_OPENGL);
-
 	//Create scenes
 	vector<Particle> particles;
 	
 	//GroundSmash scene("GroundSmash");
-	//SingleParticle scene("Single Particle");
 	//SnowballDrop scene("SnowballDrop");
 	WallSmash scene("Wallsmash");
 	solverParams sp;
@@ -79,6 +71,7 @@ int main() {
 	scene.init(particles, &sp);
 
 	Camera cam = Camera();
+	cam.eye = glm::vec3(sp.boxCorner2.x, sp.boxCorner2.y, sp.boxCorner2.z);
 	Renderer renderer = Renderer(width, height, &sp);
 	renderer.setProjection(glm::infinitePerspective(cam.zoom, float(width) / float(height), 0.1f));
 
@@ -89,6 +82,15 @@ int main() {
 
 	//Take 1 step for initialization
 	system.updateWrapper(sp);
+
+	//Tell ffmpeg to expect raw rgba 720p-60hz frames
+	//-i - tells it to read frames from stdin
+	string cmd = "output\\ffmpeg.exe -r " + std::to_string((1.0f/60.0f) / sp.deltaT) + " -f rawvideo -pix_fmt rgba -s 1280x720 -i - "
+		"-threads 0 -preset fast -y -pix_fmt yuv420p -crf 21 -vf vflip output\\snow.mp4";
+
+	//open pipe to ffmpeg's stdin in binary write mode
+	FILE* ffmpeg;
+	int* buffer = new int[width*height];
 
 	while (!glfwWindowShouldClose(window)) {
 		//Set frame times
@@ -102,19 +104,30 @@ int main() {
 
 		//Step physics and render
 		mainUpdate(system, renderer, cam, sp);
-
-		if (!paused) {
-			if (frameCounter % (int)(1 / (sp.deltaT * 30 * 3)) == 0) {
-				cout << lastFrame << endl;
-				saveVideo();
-			}
-		}
 		
 		//Swap the buffers
 		glfwSwapBuffers(window);
 
+		//Save video if turned on
+		if (startVideo == true)	{
+			ffmpeg = _popen(cmd.c_str(), "wb");
+			startVideo = false;
+		}
+		if (!paused) {
+			if (frameCounter % (int)(1 / (sp.deltaT * 30 * 3)) == 0) {
+				cout << lastFrame << endl;
+				
+			}
+		}
+		if (video == true) {
+			glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+			fwrite(buffer, sizeof(int)* width * height, 1, ffmpeg);
+		}
+
 		//glfwSetCursorPos(window, lastX, lastY);
 	}
+
+	_pclose(ffmpeg);
 
 	glfwTerminate();
 
@@ -146,8 +159,13 @@ void handleInput(GLFWwindow* window, ParticleSystem &system, Camera &cam) {
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 		spacePressed = true;
 
-	if (glfwGetKey(window, GLFW_KEY_COMMA) == GLFW_PRESS)
-		ss = true;
+	if (glfwGetKey(window, GLFW_KEY_COMMA) == GLFW_PRESS) {
+		startVideo = true;
+		video = true;
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_PERIOD) == GLFW_PRESS)
+		video = false;
 
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE) {
 		if (spacePressed) {
@@ -165,22 +183,6 @@ void handleInput(GLFWwindow* window, ParticleSystem &system, Camera &cam) {
 	glfwGetCursorPos(window, &xpos, &ypos);
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
 		cam.mouseMovement((float(xpos) - lastX), (lastY - float(ypos)), deltaTime);
-}
-
-void saveVideo() {
-	if (ss == true) {
-		ILuint imageID = ilGenImage();
-		ilBindImage(imageID);
-		ilutGLScreen();
-		ilEnable(IL_FILE_OVERWRITE);
-		std::string str = "output/" + std::to_string(w) + ".png";
-		const char* c = str.c_str();
-		std::cout << c << std::endl;
-		ilSaveImage(c);
-		//ilutGLScreenie();
-		ilDeleteImage(imageID);
-		w++;
-	}
 }
 
 void mainUpdate(ParticleSystem& system, Renderer& renderer, Camera& cam, solverParams& params) {

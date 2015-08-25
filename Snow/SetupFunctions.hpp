@@ -6,7 +6,7 @@
 #include "Particle.h"
 #include <time.h>
 
-inline void createParticleGrid(std::vector<Particle>& particles, solverParams* sp, float3 lower, int3 dims, float radius, float mass) {
+inline void createParticleGrid(std::vector<Particle>& particles, solverParams* sp, float3 lower, int3 dims, float radius, float mass, float3 velocity) {
 	//srand(int(time(NULL)));
 	srand(16);
 
@@ -18,7 +18,6 @@ inline void createParticleGrid(std::vector<Particle>& particles, solverParams* s
 				float r3 = 0.001f + static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 				float3 jitter = make_float3(r1, r2, r3) * radius;
 				float3 pos = lower + make_float3(float(x), float(y), float(z)) * radius + jitter;
-				float3 velocity = make_float3(0);
 				particles.push_back(Particle(pos, velocity, mass));
 			}
 		}
@@ -40,7 +39,7 @@ inline void createSnowball(std::vector<Particle>& particles, float3 center, int3
 				float3 pos = center + make_float3(float(x), float(y), float(z)) * radius + jitter;
 				// see if pos is inside the sphere
 				if (length(pos - center) < sphereRadius) {
-					particles.push_back(Particle(make_float3(pos.x, pos.y, pos.z), make_float3(velocity.x, velocity.y, velocity.z), mass));
+					particles.push_back(Particle(make_float3(pos.x, pos.y, pos.z), velocity, mass));
 				}
 			}
 		}
