@@ -5,7 +5,7 @@ Dependencies for the project include:
   - GLFW
   - CUDA 7
   - GLM
-  - DevIL
+  - ffmpeg
 
 3x3 SVD implementation taken from https://github.com/ericjang/svd3
 
